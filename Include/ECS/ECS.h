@@ -54,10 +54,12 @@ public:
 	void Update()
 	{
 		for (auto& c : components) c->Update();
-		for (auto& c : components) c->Draw();
 	}
 
-	void Draw(){}
+	void Draw()
+	{
+		for (auto& c : components) c->Draw();
+	}
 	bool isActive() const { return active; }
 	void Destroy() { active = false; }
 
@@ -67,7 +69,7 @@ public:
 	}
 
 	template <typename T, typename... TArgs> 
-	T& AddComponent(TArgs&... mArgs)
+	T& AddComponent(TArgs&&... mArgs)
 	{
 		T* c(new T(std::forward<TArgs>(mArgs)...));
 		c->entity = this;

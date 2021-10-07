@@ -1,15 +1,15 @@
 #include "Game.h"
 #include "TextureManager.h"
-#include "GameObject.h"
 #include "TileMap.h"
-#include "ECS.h"
-#include "Components.h"
+#include "ECS/Components.h"
+#include "Vector2D.h"
 
-GameObject* player;
-SDL_Renderer* Game::renderer = nullptr;
 TileMap* map;
 Manager manager;
-auto& newPlayer(manager.AddEntity());
+
+SDL_Renderer* Game::renderer = nullptr;
+
+auto& player(manager.AddEntity());
 
 Game::Game(){}
 Game::~Game(){}
@@ -33,10 +33,10 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 		isRunning = true;
 	}
 
-	player = new GameObject("Assets/player.png", 0, 0);
 	map = new TileMap();
 
-	newPlayer.AddComponent<PositionComponent>();
+	player.AddComponent<TransformComponent>();
+	player.AddComponent<SpriteComponent>("Assets/player.png");
 }
 
 void Game::HandleEvents()
@@ -56,10 +56,14 @@ void Game::HandleEvents()
 
 void Game::Update()
 {
-	player->Update();
+	manager.Refresh();
 	manager.Update();
-	std::cout << newPlayer.GetComponent<PositionComponent>().x() << "," <<
-		newPlayer.GetComponent<PositionComponent>().y() << std::endl;
+	player.GetComponent<TransformComponent>().position += Vec2f(5,0);
+
+	if (player.GetComponent<TransformComponent>().position.x > 100)
+	{
+		std::cout << "Pos is 100" << std::endl;
+	}
 }
 
 void Game::Render() 
@@ -67,8 +71,7 @@ void Game::Render()
 	SDL_RenderClear(renderer);
 
 	map->Draw();
-	player->Render();
-
+	manager.Draw();
 	SDL_RenderPresent(renderer);
 }
 
@@ -77,5 +80,4 @@ void Game::Clean()
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
-	std::cout << "Game Cleaned" << std::endl;
 }
