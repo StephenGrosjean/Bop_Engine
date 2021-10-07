@@ -154,6 +154,8 @@
     <ClCompile Include="Src\TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Components.h" />
+    <ClInclude Include="Include\ECS.h" />
     <ClInclude Include="Include\Game.h" />
     <ClInclude Include="Include\GameObject.h" />
     <ClInclude Include="Include\TextureManager.h" />

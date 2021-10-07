@@ -2,20 +2,17 @@
 #include "TextureManager.h"
 #include "GameObject.h"
 #include "TileMap.h"
+#include "ECS.h"
+#include "Components.h"
 
 GameObject* player;
 SDL_Renderer* Game::renderer = nullptr;
 TileMap* map;
+Manager manager;
+auto& newPlayer(manager.AddEntity());
 
-Game::Game()
-{
-
-}
-
-Game::~Game()
-{
-
-}
+Game::Game(){}
+Game::~Game(){}
 
 void Game::Init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen) 
 {
@@ -38,6 +35,8 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
 	player = new GameObject("Assets/player.png", 0, 0);
 	map = new TileMap();
+
+	newPlayer.AddComponent<PositionComponent>();
 }
 
 void Game::HandleEvents()
@@ -58,6 +57,9 @@ void Game::HandleEvents()
 void Game::Update()
 {
 	player->Update();
+	manager.Update();
+	std::cout << newPlayer.GetComponent<PositionComponent>().x() << "," <<
+		newPlayer.GetComponent<PositionComponent>().y() << std::endl;
 }
 
 void Game::Render() 
