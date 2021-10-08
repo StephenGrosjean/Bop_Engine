@@ -3,13 +3,15 @@
 #include "TileMap.h"
 #include "ECS/Components.h"
 #include "Vector2D.h"
+#include "Collision.h"
 
 TileMap* map;
 Manager manager;
-
+SDL_Event Game::event;
 SDL_Renderer* Game::renderer = nullptr;
 
 auto& player(manager.AddEntity());
+auto& wall(manager.AddEntity());
 
 Game::Game(){}
 Game::~Game(){}
@@ -35,13 +37,19 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
 	map = new TileMap();
 
-	player.AddComponent<TransformComponent>();
+	player.AddComponent<TransformComponent>(2);
+	player.AddComponent<KeyboardController>();
 	player.AddComponent<SpriteComponent>("Assets/player.png");
+	player.AddComponent<ColliderComponent>();
+
+	wall.AddComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
+	wall.AddComponent<SpriteComponent>("Assets/dirt.png");
+	wall.AddComponent<ColliderComponent>("wall");
 }
 
 void Game::HandleEvents()
 {
-	SDL_Event event;
+	
 	SDL_PollEvent(&event);
 
 	switch (event.type)
@@ -58,11 +66,11 @@ void Game::Update()
 {
 	manager.Refresh();
 	manager.Update();
-	player.GetComponent<TransformComponent>().position += Vec2f(5,0);
 
-	if (player.GetComponent<TransformComponent>().position.x > 100)
+	if (Collision::AABB(player.GetComponent<ColliderComponent>().collider,
+		wall.GetComponent<ColliderComponent>().collider))
 	{
-		std::cout << "Pos is 100" << std::endl;
+		std::cout << "Collision" << std::endl;
 	}
 }
 

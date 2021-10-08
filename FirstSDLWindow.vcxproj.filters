@@ -24,10 +24,10 @@
     <ClCompile Include="Src\TextureManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Src\GameObject.cpp">
+    <ClCompile Include="Src\TileMap.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Src\TileMap.cpp">
+    <ClCompile Include="Src\Collision.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,9 +36,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Include\TextureManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\GameObject.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Include\TileMap.h">
@@ -59,6 +56,18 @@
     <ClInclude Include="Include\Vector2D.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Include\ECS\KeyboardController.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ECS\Animation.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ECS\ColliderComponent.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Collision.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\player.png">
@@ -71,6 +80,9 @@
       <Filter>Fichiers de ressources</Filter>
     </Image>
     <Image Include="Assets\water.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="Assets\player_anims.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
   </ItemGroup>

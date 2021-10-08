@@ -148,19 +148,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Collision.cpp" />
     <ClCompile Include="Src\Game.cpp" />
-    <ClCompile Include="Src\GameObject.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\TextureManager.cpp" />
     <ClCompile Include="Src\TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Collision.h" />
+    <ClInclude Include="Include\ECS\Animation.h" />
+    <ClInclude Include="Include\ECS\ColliderComponent.h" />
     <ClInclude Include="Include\ECS\Components.h" />
     <ClInclude Include="Include\ECS\ECS.h" />
+    <ClInclude Include="Include\ECS\KeyboardController.h" />
     <ClInclude Include="Include\ECS\TransformComponent.h" />
     <ClInclude Include="Include\ECS\SpriteComponent.h" />
     <ClInclude Include="Include\Game.h" />
-    <ClInclude Include="Include\GameObject.h" />
     <ClInclude Include="Include\TextureManager.h" />
     <ClInclude Include="Include\TileMap.h" />
     <ClInclude Include="Include\Vector2D.h" />
@@ -169,6 +172,7 @@
     <Image Include="Assets\dirt.png" />
     <Image Include="Assets\grass.png" />
     <Image Include="Assets\player.png" />
+    <Image Include="Assets\player_anims.png" />
     <Image Include="Assets\water.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
