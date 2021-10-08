@@ -2,6 +2,10 @@
 #define Game_h
 #include "SDL.h"
 #include <iostream>
+#include <vector>
+#include "Vector2D.h"
+
+class ColliderComponent;
 
 class Game {
 
@@ -18,8 +22,11 @@ public:
 	
 	bool Running() { return isRunning; }
 
+	static void AddTile(int id, Vec2i position);
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
+	static std::vector<ColliderComponent*> colliders;
+
 private:
 	int counter = 0;
 	bool isRunning = false;

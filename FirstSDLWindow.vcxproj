@@ -161,6 +161,7 @@
     <ClInclude Include="Include\ECS\Components.h" />
     <ClInclude Include="Include\ECS\ECS.h" />
     <ClInclude Include="Include\ECS\KeyboardController.h" />
+    <ClInclude Include="Include\ECS\TileComponent.h" />
     <ClInclude Include="Include\ECS\TransformComponent.h" />
     <ClInclude Include="Include\ECS\SpriteComponent.h" />
     <ClInclude Include="Include\Game.h" />

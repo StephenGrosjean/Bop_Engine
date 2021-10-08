@@ -1,26 +1,14 @@
 #pragma once
-#include "Game.h"
-
+#include "Vector2D.h"
+#include <string>
 class TileMap
 {
 public:
 	TileMap();
 	~TileMap();
 
-
-	static const int rows = 20;
-	static const int columns = 25;
-
-	void Load(int arr[rows][columns]);
-	void Draw();
+	static void Load(std::string path, Vec2i size);
 
 private:
-	SDL_Rect src;
-	SDL_Rect dest;
 
-	SDL_Texture* dirt;
-	SDL_Texture* grass;
-	SDL_Texture* water;
-
-	int map[rows][columns];
 };
