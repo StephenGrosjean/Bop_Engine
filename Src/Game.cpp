@@ -5,6 +5,8 @@
 #include "Vector2D.h"
 #include "Collision.h"
 
+#include <sstream>
+
 TileMap* map;
 Manager manager;
 SDL_Event Game::event;
@@ -14,10 +16,12 @@ AssetManager* Game::assetManager = new AssetManager(&manager);
 SDL_Rect Game::camera = { 0,0,800,640};
 
 auto& player(manager.AddEntity());
+auto& label(manager.AddEntity());
 
 auto& tiles(manager.GetGroup(Game::groupMap));
 auto& players(manager.GetGroup(Game::groupPlayers));
 auto& colliders(manager.GetGroup(Game::groupColliders));
+auto& projectiles(manager.GetGroup(Game::groupProjectiles));
 
 Game::Game(){}
 Game::~Game(){}
@@ -41,8 +45,15 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 		isRunning = true;
 	}
 
+	if (TTF_Init() == -1)
+	{
+		std::cout << "Error SDL_TTF" << std::endl;
+	}
+
 	assetManager->AddTexture("terrain", "Assets/terrain_ss.png");
 	assetManager->AddTexture("player", "Assets/player_anims.png");
+	assetManager->AddTexture("projectile", "Assets/projectile.png");
+	assetManager->AddFont("arial", "Assets/Fonts/arial.ttf", 16);
 
 	map = new TileMap("terrain", 2, 32);
 
@@ -55,6 +66,11 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	player.AddComponent<ColliderComponent>();
 	player.GetComponent<ColliderComponent>().collider = { 200,200 };
 	player.AddGroup(groupPlayers);
+
+	assetManager->CreateProjectile(Vec2i(400, 100), Vec2f::left, 200, 2, "projectile");
+
+	SDL_Color white = { 255,255,255,255 };
+	label.AddComponent<UILabel>(Vec2i(10,10), "Test string", "arial", white);
 }
 
 void Game::HandleEvents()
@@ -77,6 +93,10 @@ void Game::Update()
 	SDL_Rect playerCol = player.GetComponent<ColliderComponent>().collider;
 	Vec2f playerPos = player.GetComponent<TransformComponent>().position;
 
+	std::stringstream ss;
+	ss << "Player position : " << playerPos;
+	label.GetComponent<UILabel>().SetLabelText(ss.str(), "arial");
+
 	manager.Refresh();
 	manager.Update();
 
@@ -87,6 +107,14 @@ void Game::Update()
 		{
 			std::cout << player.GetComponent<TransformComponent>().position << std::endl;
 			player.GetComponent<TransformComponent>().position = playerPos;
+		}
+	}
+
+	for (auto& p : projectiles)
+	{
+		if (Collision::AABB(player.GetComponent<ColliderComponent>().collider, p->GetComponent<ColliderComponent>().collider))
+		{
+			p->Destroy();
 		}
 	}
 
@@ -120,10 +148,12 @@ void Game::Render()
 		p->Draw();
 	}
 
-	for (auto& c : colliders)
+	for (auto& p : projectiles)
 	{
-		c->Draw();
+		p->Draw();
 	}
+
+	label.Draw();
 
 	SDL_RenderPresent(renderer);
 }

@@ -121,14 +121,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Dev\SDL2_Image\include;D:\Dev\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Dev\SDL2_ttf\include;D:\Dev\SDL2_Image\include;D:\Dev\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Dev\SDL2_Image\lib\x64;D:\Dev\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Dev\SDL2_ttf\lib\x64;D:\Dev\SDL2_Image\lib\x64;D:\Dev\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -164,9 +164,11 @@
     <ClInclude Include="Include\ECS\Components.h" />
     <ClInclude Include="Include\ECS\ECS.h" />
     <ClInclude Include="Include\ECS\KeyboardController.h" />
+    <ClInclude Include="Include\ECS\ProjectileComponent.h" />
     <ClInclude Include="Include\ECS\TileComponent.h" />
     <ClInclude Include="Include\ECS\TransformComponent.h" />
     <ClInclude Include="Include\ECS\SpriteComponent.h" />
+    <ClInclude Include="Include\ECS\UILabelComponent.h" />
     <ClInclude Include="Include\Game.h" />
     <ClInclude Include="Include\TextureManager.h" />
     <ClInclude Include="Include\TileMap.h" />
