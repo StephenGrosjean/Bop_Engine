@@ -1,16 +1,14 @@
 #pragma once
 
+/// <summary>
+/// Structure used to contain the animation parameters
+/// </summary>
 struct Animation
 {
-	int index;
-	int frames;
-	int frameDelay;
+	int index;		// Current animation index
+	int frames;		// Number of frames in the animation
+	int frameDelay; // Delay between frames
 
-	Animation(){}
-	Animation(int index, int frames, int frameDelay)
-	{
-		this->index = index;
-		this->frames = frames;
-		this->frameDelay = frameDelay;
-	}
+	Animation() = default;
+	Animation(int index, int frames, int frameDelay) : index(index), frames(frames), frameDelay(frameDelay){}
 };
