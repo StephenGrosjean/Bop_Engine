@@ -1,7 +1,5 @@
 #pragma once
 #include "ECS.h"
-#include "TransformComponent.h"
-#include "SpriteComponent.h"
 #include "SDL.h"
 
 
@@ -9,49 +7,31 @@ class TileComponent : public Component
 {
 public:
 
-	const char* grassPath = "Assets/grass.png";
-	const char* dirtPath = "Assets/dirt.png";
-	const char* waterPath = "Assets/water.png";
+	SDL_Texture* texture;
+	SDL_Rect srcRect;
+	SDL_Rect destRect;
 
-	TransformComponent* transform;
-	SpriteComponent* sprite;
-
-	SDL_Rect tileRect;
-	int tileID;
-	const char* path;
-
-	TileComponent() {};
-	TileComponent(Vec2i position, Vec2i size, int id)
+	TileComponent() = default;
+	~TileComponent()
 	{
-		tileRect.x = position.x;
-		tileRect.y = position.y;
-		tileRect.w = size.x;
-		tileRect.h = size.y;
-		tileID = id;
+		SDL_DestroyTexture(texture);
+	}
+	TileComponent(Vec2i sourceCords, Vec2i position, const char* path)
+	{
+		texture = TextureManager::LoadTexture(path);
 
-		switch (tileID)
-		{
-			case 0:
-				path = dirtPath;
-				break;
-			case 1:
-				path = grassPath;
-				break;
-			case 2:
-				path = waterPath;
+		srcRect.x = sourceCords.x;
+		srcRect.y = sourceCords.y;
+		srcRect.w = srcRect.h = 32;
 
-				break;
-			default:
-				break;
-		}
+		destRect.x = position.x;
+		destRect.y = position.y;
+		destRect.w = destRect.h = 64;
 	}
 
-	void Init() override
+	void Draw() override
 	{
-		entity->AddComponent<TransformComponent>(tileRect.x, tileRect.y, tileRect.w, tileRect.h, 1);
-		transform = &entity->GetComponent<TransformComponent>();
-		
-		entity->AddComponent<SpriteComponent>(path);
-		sprite = &entity->GetComponent<SpriteComponent>();
+		TextureManager::Draw(texture, srcRect, destRect, SDL_FLIP_NONE);
 	}
+
 };

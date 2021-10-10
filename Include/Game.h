@@ -23,7 +23,7 @@ public:
 	
 	bool Running() { return isRunning; }
 
-	static void AddTile(int id, Vec2i position);
+	static void AddTile(Vec2i sourceCoords, Vec2i position);
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
 	static std::vector<ColliderComponent*> colliders;

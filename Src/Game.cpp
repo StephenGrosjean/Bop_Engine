@@ -15,6 +15,8 @@ std::vector<ColliderComponent*> Game::colliders;
 auto& player(manager.AddEntity());
 auto& wall(manager.AddEntity());
 
+const char* mapFile = "Assets/terrain_ss.png";
+
 enum groupLabels : std::size_t
 {
 	groupMap,
@@ -47,18 +49,13 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
 	map = new TileMap();
 
-	TileMap::Load("Assets/map.map", Vec2i(16, 16));
+	TileMap::Load("Assets/map.map", Vec2i(25, 20));
 
-	player.AddComponent<TransformComponent>(2);
+	player.AddComponent<TransformComponent>(3);
 	player.AddComponent<SpriteComponent>("Assets/player_anims.png", true);
 	player.AddComponent<KeyboardController>();
 	player.AddComponent<ColliderComponent>();
 	player.AddGroup(groupPlayers);
-
-	wall.AddComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
-	wall.AddComponent<SpriteComponent>("Assets/dirt.png");
-	wall.AddComponent<ColliderComponent>("wall");
-	wall.AddGroup(groupMap);
 }
 
 void Game::HandleEvents()
@@ -122,10 +119,9 @@ void Game::Clean()
 	SDL_Quit();
 }
 
-void Game::AddTile(int id, Vec2i position)
+void Game::AddTile(Vec2i sourceCoords, Vec2i position)
 {
 	auto& tile(manager.AddEntity());
-	tile.AddComponent<TileComponent>(position, Vec2i(32, 32), id);
+	tile.AddComponent<TileComponent>(sourceCoords, position, mapFile);
 	tile.AddGroup(groupMap);
-
 }
