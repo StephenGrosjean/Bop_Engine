@@ -1,8 +1,14 @@
 #include "TileMap.h"
 #include "Game.h"
 #include <fstream>
+#include "ECS\ECS.h"
+#include "ECS\Components.h"
+#include "Game.h"
 
-TileMap::TileMap()
+extern Manager manager;
+
+TileMap::TileMap(std::string textureID, int mapScale, int tileSize)
+	: textureID(textureID), mapScale(mapScale), tileSize(tileSize)
 {
 }
 
@@ -23,14 +29,38 @@ void TileMap::Load(std::string path, Vec2i size)
 		for (int x = 0; x < size.x; x++)
 		{
 			mapFile.get(c);
-			sourceCoords.y = atoi(&c) * 32;
+			sourceCoords.y = atoi(&c) * tileSize;
 			mapFile.get(c);
-			sourceCoords.x = atoi(&c) * 32;
+			sourceCoords.x = atoi(&c) * tileSize;
 
-			Game::AddTile(sourceCoords, Vec2i(x, y)*64);
+			AddTile(sourceCoords, Vec2i(x, y) * (tileSize* mapScale));
+			mapFile.ignore();
+		}
+	}
+
+	mapFile.ignore();
+
+	for (int y = 0; y < size.y; y++)
+	{
+		for (int x = 0; x < size.x; x++)
+		{
+			mapFile.get(c);
+			if (c == '1')
+			{
+				auto& tcol(manager.AddEntity());
+				tcol.AddComponent<ColliderComponent>("Terrain", Vec2i(x,y) * (tileSize * mapScale), tileSize * mapScale);
+				tcol.AddGroup(Game::groupColliders);
+			}
 			mapFile.ignore();
 		}
 	}
 
 	mapFile.close();
+}
+
+void TileMap::AddTile(Vec2i sourceCoords, Vec2i position)
+{
+	auto& tile(manager.AddEntity());
+	tile.AddComponent<TileComponent>(sourceCoords, position, tileSize, mapScale, textureID);
+	tile.AddGroup(Game::groupMap);
 }

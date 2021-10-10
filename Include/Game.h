@@ -5,6 +5,7 @@
 #include <vector>
 #include "Vector2D.h"
 #include "SDL_image.h"
+#include "AssetManager.h"
 
 class ColliderComponent;
 
@@ -23,10 +24,19 @@ public:
 	
 	bool Running() { return isRunning; }
 
-	static void AddTile(Vec2i sourceCoords, Vec2i position);
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
-	static std::vector<ColliderComponent*> colliders;
+	static SDL_Rect camera;
+	static AssetManager* assetManager;
+
+	enum groupLabels : std::size_t
+	{
+		groupMap,
+		groupPlayers,
+		groupEnemies,
+		groupColliders
+	};
+
 
 private:
 	int counter = 0;

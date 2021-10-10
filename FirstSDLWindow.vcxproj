@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\AssetManager.cpp" />
     <ClCompile Include="Src\Collision.cpp" />
     <ClCompile Include="Src\ECS\ECS.cpp" />
     <ClCompile Include="Src\Game.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="Src\TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\AssetManager.h" />
     <ClInclude Include="Include\Collision.h" />
     <ClInclude Include="Include\ECS\Animation.h" />
     <ClInclude Include="Include\ECS\ColliderComponent.h" />
@@ -171,12 +173,7 @@
     <ClInclude Include="Include\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\dirt.png" />
-    <Image Include="Assets\grass.png" />
-    <Image Include="Assets\player.png" />
     <Image Include="Assets\player_anims.png" />
-    <Image Include="Assets\player_idle.png" />
-    <Image Include="Assets\water.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\map.map" />

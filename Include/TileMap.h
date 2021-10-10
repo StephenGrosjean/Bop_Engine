@@ -4,11 +4,15 @@
 class TileMap
 {
 public:
-	TileMap();
+	TileMap(std::string textureID, int mapScale, int tileSize);
 	~TileMap();
 
-	static void Load(std::string path, Vec2i size);
+	void Load(std::string path, Vec2i size);
+	void AddTile(Vec2i sourceCoords, Vec2i position);
 
 private:
+	std::string textureID;
+	int mapScale;
+	int tileSize;
 
 };

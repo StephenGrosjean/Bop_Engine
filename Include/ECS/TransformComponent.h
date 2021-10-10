@@ -44,12 +44,12 @@ public:
 
 	void Init() override
 	{
-		velocity = Vec2f(0, 0);
+		velocity = Vec2f::zero;
 	}
 
 	void Update() override
 	{
-		position.x += velocity.x * speed;
-		position.y += velocity.y * speed;
+		position.x += static_cast<int>(velocity.x * speed);
+		position.y += static_cast<int>(velocity.y * speed);
 	}
 };

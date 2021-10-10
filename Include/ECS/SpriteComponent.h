@@ -3,6 +3,7 @@
 #include "TransformComponent.h"
 #include "Animation.h"
 #include "TextureManager.h"
+#include "Game.h"
 #include <map>
 
 class SpriteComponent : public Component
@@ -26,12 +27,12 @@ public:
 	SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
 
 	SpriteComponent() = default;
-	SpriteComponent(const char* path)
+	SpriteComponent(std::string textureID)
 	{
-		SetTexture(path);
+		SetTexture(textureID);
 	}
 
-	SpriteComponent(const char* path, bool isAnimated)
+	SpriteComponent(std::string textureID, bool isAnimated)
 	{
 		animated = isAnimated;
 
@@ -42,12 +43,12 @@ public:
 		animations.emplace("Walk", walk);
 
 		Play("Idle");
-		SetTexture(path);
+		SetTexture(textureID);
 	}
 
 	~SpriteComponent()
 	{
-		SDL_DestroyTexture(texture);
+
 	}
 
 	void Init() override
@@ -68,8 +69,8 @@ public:
 
 		srcRect.y = animationIndex * transform->height;
 
-		destRect.x = (int)transform->position.x;
-		destRect.y = (int)transform->position.y;
+		destRect.x = (int)transform->position.x - Game::camera.x;
+		destRect.y = (int)transform->position.y - Game::camera.y;
 		destRect.w = transform->width * transform->scale;
 		destRect.h = transform->height * transform->scale;
 	}
@@ -79,9 +80,9 @@ public:
 		TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
 	}
 
-	void SetTexture(const char* path)
+	void SetTexture(std::string textureID)
 	{
-		texture = TextureManager::LoadTexture(path);
+		texture = Game::assetManager->GetTexture(textureID);
 	}
 
 	void Play(const char* animName)
