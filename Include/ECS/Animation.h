@@ -4,13 +4,13 @@ struct Animation
 {
 	int index;
 	int frames;
-	int speed;
+	int frameDelay;
 
 	Animation(){}
-	Animation(int index, int frames, int speed)
+	Animation(int index, int frames, int frameDelay)
 	{
 		this->index = index;
 		this->frames = frames;
-		this->speed = speed;
+		this->frameDelay = frameDelay;
 	}
 };

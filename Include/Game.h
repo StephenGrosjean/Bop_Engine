@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "Vector2D.h"
+#include "SDL_image.h"
 
 class ColliderComponent;
 

@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\Collision.cpp" />
+    <ClCompile Include="Src\ECS\ECS.cpp" />
     <ClCompile Include="Src\Game.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\TextureManager.cpp" />
@@ -174,7 +175,11 @@
     <Image Include="Assets\grass.png" />
     <Image Include="Assets\player.png" />
     <Image Include="Assets\player_anims.png" />
+    <Image Include="Assets\player_idle.png" />
     <Image Include="Assets\water.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\map.map" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

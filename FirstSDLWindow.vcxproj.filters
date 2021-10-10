@@ -30,6 +30,9 @@
     <ClCompile Include="Src\Collision.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="Src\ECS\ECS.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Game.h">
@@ -88,5 +91,11 @@
     <Image Include="Assets\player_anims.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
+    <Image Include="Assets\player_idle.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\map.map" />
   </ItemGroup>
 </Project>
