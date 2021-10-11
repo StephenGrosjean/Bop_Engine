@@ -11,6 +11,12 @@
 class ColliderComponent : public Component
 {
 public:
+	enum class Type
+	{
+		Box,
+		Sphere
+	};
+
 	TransformComponent* transform;  // Entity transform component
 
 	SDL_Rect collider;				// Collider rect
@@ -19,7 +25,8 @@ public:
 	SDL_Texture* texture;			// Collider texture (used to visualize colliders)
 	SDL_Rect srcRect;				// Source rect of the texture
 	SDL_Rect destRect;				// Destination rect of the texture
-
+	int radius;
+	Type type;
 
 	//Default constructor
 	ColliderComponent()
@@ -35,6 +42,7 @@ public:
 	{
 		this->tag = tag;
 	}
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -47,6 +55,12 @@ public:
 		collider.x = position.x;
 		collider.y = position.y;
 		collider.h = collider.w = size;
+	}
+
+	void SetPosition(Vec2i pos)
+	{
+		collider.x = pos.x;
+		collider.y = pos.y;
 	}
 
 	//Called on the start of the component
@@ -73,8 +87,8 @@ public:
 		{
 			collider.x = static_cast<int>(transform->position.x);
 			collider.y = static_cast<int>(transform->position.y);
-			collider.w = transform->width * transform->scale;
-			collider.h = transform->height * transform->scale;
+			collider.w = transform->width * transform->scale.x;
+			collider.h = transform->height * transform->scale.y;
 		}
 		
 		destRect.x = collider.x - Game::camera.x;

@@ -71,8 +71,8 @@ public:
 
 		destRect.x = (int)transform->position.x - Game::camera.x;
 		destRect.y = (int)transform->position.y - Game::camera.y;
-		destRect.w = transform->width * transform->scale;
-		destRect.h = transform->height * transform->scale;
+		destRect.w = transform->width * transform->scale.x;
+		destRect.h = transform->height * transform->scale.y;
 	}
 
 	void Draw() override

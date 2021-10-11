@@ -38,7 +38,8 @@ public:
 		groupPlayers,
 		groupEnemies,
 		groupColliders,
-		groupProjectiles
+		groupProjectiles,
+		groupValidTiles
 	};
 
 
@@ -46,6 +47,8 @@ private:
 	bool isRunning = false;
 	int counter = 0;
 	SDL_Window* window;
+	bool isPlayer1Valid;
+	bool isPlayer2Valid;
 };
 
 

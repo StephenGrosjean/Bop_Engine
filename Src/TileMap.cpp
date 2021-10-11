@@ -61,6 +61,30 @@ void TileMap::Load(std::string path, Vec2i size)
 void TileMap::AddTile(Vec2i sourceCoords, Vec2i position)
 {
 	auto& tile(manager.AddEntity());
-	tile.AddComponent<TileComponent>(sourceCoords, position, tileSize, mapScale, textureID);
+	tile.AddComponent<TileComponent>(sourceCoords, position, tileSize, mapScale, textureID);	
 	tile.AddGroup(Game::groupMap);
+	Tile t(position, tile);
+	tiles.push_back(t);
+}
+
+void TileMap::SetTileTexture(Vec2i position, std::string textureID)
+{
+	for (auto& t : tiles)
+	{
+		if (t.pos == position)
+		{
+			t.entity.GetComponent<TileComponent>().SetTexture(textureID);
+		}
+	}
+}
+
+Entity& TileMap::GetTileEntity(Vec2i position)
+{
+	for (auto& t : tiles)
+	{
+		if (t.pos == position)
+		{
+			return t.entity;
+		}
+	}
 }

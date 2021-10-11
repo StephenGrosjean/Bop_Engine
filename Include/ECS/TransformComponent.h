@@ -10,7 +10,7 @@ public:
 
 	int height = 32;
 	int width = 32;
-	int scale = 1;
+	Vec2i scale = Vec2i::one;
 
 	int speed = 3;
 
@@ -30,10 +30,19 @@ public:
 	{
 		position.x = 0;
 		position.y = 0;
-		scale = sc;
+		scale = Vec2i::one * sc;
 	}
 
 	TransformComponent(float x, float y, int h, int w, int sc)
+	{
+		position.x = x;
+		position.y = y;
+		height = h;
+		width = w;
+		scale = Vec2i::one * sc;
+	}
+
+	TransformComponent(float x, float y, int h, int w, Vec2i sc)
 	{
 		position.x = x;
 		position.y = y;

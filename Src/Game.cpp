@@ -14,10 +14,13 @@ SDL_Renderer* Game::renderer = nullptr;
 AssetManager* Game::assetManager = new AssetManager(&manager);
 InputManager* Game::inputManager = new InputManager();
 
-SDL_Rect Game::camera = { 0,0,800,640};
+SDL_Rect Game::camera = { 0, 0, 800, 640};
 
 auto& player1(manager.AddEntity());
 auto& player2(manager.AddEntity());
+auto& validTile(manager.AddEntity());
+
+
 
 auto& label(manager.AddEntity());
 
@@ -25,6 +28,7 @@ auto& tiles(manager.GetGroup(Game::groupMap));
 auto& players(manager.GetGroup(Game::groupPlayers));
 auto& colliders(manager.GetGroup(Game::groupColliders));
 auto& projectiles(manager.GetGroup(Game::groupProjectiles));
+auto& validTiles(manager.GetGroup(Game::groupValidTiles));
 
 Game::Game(){}
 Game::~Game(){}
@@ -56,11 +60,21 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	assetManager->AddTexture("terrain", "Assets/terrain_ss.png");
 	assetManager->AddTexture("player", "Assets/player_anims.png");
 	assetManager->AddTexture("projectile", "Assets/projectile.png");
+	assetManager->AddTexture("validTile", "Assets/validTile.png");
+	assetManager->AddTexture("collider", "Assets/ColliderTexture.png");
 	assetManager->AddFont("arial", "Assets/Fonts/arial.ttf", 16);
 
 	map = new TileMap("terrain", 2, 32);
 
 	map->Load("Assets/map.map", Vec2i(10, 10));
+	map->SetTileTexture(Vec2i(64, 64), "validTile");
+
+	validTile.AddComponent<TransformComponent>(500,500, 32, 32, 2);
+	validTile.AddComponent<SpriteComponent>("collider", false);
+	validTile.AddComponent<ColliderComponent>();
+	validTile.GetComponent<ColliderComponent>().collider = { 500,500 };
+	validTile.AddComponent<ValidTileComponent>();
+	validTile.AddGroup(groupValidTiles);
 
 	player1.AddComponent<TransformComponent>(3);
 	player1.GetComponent<TransformComponent>().position = Vec2f(200, 200);
@@ -78,10 +92,11 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	player2.GetComponent<ColliderComponent>().collider = { 400,400 };
 	player2.AddGroup(groupPlayers);
 
-	//assetManager->CreateProjectile(Vec2i(400, 100), Vec2f::left, 200, 2, "projectile");
+	assetManager->CreateProjectile(Vec2i(600, 0), Vec2f::left, 200, 2, "projectile");
 
 	SDL_Color white = { 255,255,255,255 };
 	label.AddComponent<UILabel>(Vec2i(10,10), "Test string", "arial", white);
+	
 }
 
 void Game::HandleEvents()
@@ -97,8 +112,10 @@ void Game::HandleEvents()
 
 void Game::Update()
 {
-	SDL_Rect player1Col = player1.GetComponent<ColliderComponent>().collider;
-	SDL_Rect player2Col = player2.GetComponent<ColliderComponent>().collider;
+	ColliderComponent& player1Col = player1.GetComponent<ColliderComponent>();
+	ColliderComponent& player2Col = player2.GetComponent<ColliderComponent>();
+	Vec2f player1Vel = player1.GetComponent<TransformComponent>().velocity;
+	Vec2f player2Vel = player2.GetComponent<TransformComponent>().velocity;
 
 	Vec2f player1Pos = player1.GetComponent<TransformComponent>().position;
 	Vec2f player2Pos = player2.GetComponent<TransformComponent>().position;
@@ -112,14 +129,17 @@ void Game::Update()
 
 	for (auto& c : colliders)
 	{
-		SDL_Rect cCol = c->GetComponent<ColliderComponent>().collider;
+		ColliderComponent& cCol = c->GetComponent<ColliderComponent>();
 		if (Collision::AABB(cCol, player1Col))
 		{
 			player1.GetComponent<TransformComponent>().position = player1Pos;
+			//player1.GetComponent<TransformComponent>().velocity = player1Vel * -1;
 		}
+
 		if (Collision::AABB(cCol, player2Col))
 		{
 			player2.GetComponent<TransformComponent>().position = player2Pos;
+			//player2.GetComponent<TransformComponent>().velocity = player2Vel * -1;
 		}
 	}
 
@@ -131,7 +151,20 @@ void Game::Update()
 		}
 	}
 
-	camera.x = player1.GetComponent<TransformComponent>().position.x - 400;
+	for (auto& v : validTiles)
+	{
+		ColliderComponent& cCol = v->GetComponent<ColliderComponent>();
+		if (Collision::AABB(cCol, player1Col))
+		{
+			std::cout << "Player 1 is in validPos" << std::endl;
+		}
+		if (Collision::AABB(cCol, player2Col))
+		{
+			std::cout << "Player 2 is in validPos" << std::endl;
+		}
+	}
+
+	/*camera.x = player1.GetComponent<TransformComponent>().position.x - 400;
 	camera.y = player1.GetComponent<TransformComponent>().position.y - 320;
 
 	if (camera.x < 0)
@@ -144,7 +177,7 @@ void Game::Update()
 		camera.x = camera.w;
 
 	if (camera.y > camera.h)
-		camera.y = camera.h;
+		camera.y = camera.h;*/
 }
 
 void Game::Render() 
@@ -164,6 +197,11 @@ void Game::Render()
 	for (auto& p : projectiles)
 	{
 		p->Draw();
+	}
+
+	for (auto& v : validTiles)
+	{
+		v->Draw();
 	}
 
 	label.Draw();

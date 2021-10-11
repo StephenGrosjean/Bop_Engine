@@ -172,6 +172,7 @@
     <ClInclude Include="Include\ECS\TransformComponent.h" />
     <ClInclude Include="Include\ECS\SpriteComponent.h" />
     <ClInclude Include="Include\ECS\UILabelComponent.h" />
+    <ClInclude Include="Include\ECS\ValidTileComponent.h" />
     <ClInclude Include="Include\Game.h" />
     <ClInclude Include="Include\InputManager.h" />
     <ClInclude Include="Include\TextureManager.h" />

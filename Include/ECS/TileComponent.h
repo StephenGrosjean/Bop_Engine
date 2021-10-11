@@ -12,7 +12,7 @@ public:
 	SDL_Rect destRect;
 	Vec2i position;
 
-	TileComponent() = default;
+	TileComponent() {};
 
 	~TileComponent()
 	{
@@ -31,6 +31,12 @@ public:
 		destRect.x = position.x;
 		destRect.y = position.y;
 		destRect.w = destRect.h = tileSize * tileScale;
+	}
+
+	void SetTexture(std::string textureID)
+	{
+		texture = Game::assetManager->GetTexture(textureID);
+		Draw();
 	}
 
 	void Update() override

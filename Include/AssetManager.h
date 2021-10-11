@@ -17,7 +17,6 @@ public:
 	//GameObjects
 	void CreateProjectile(Vec2i position, Vec2f velocity, int range, int speed, std::string textureId);
 
-
 	//Texture Management
 	void AddTexture(std::string id, const char* path);
 	SDL_Texture* GetTexture(std::string id);
