@@ -24,6 +24,7 @@
     <ProjectGuid>{4c85f74a-e7f1-4a8e-aba9-8b4b9f3aab48}</ProjectGuid>
     <RootNamespace>FirstSDLWindow</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>BopEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
