@@ -6,6 +6,7 @@
 #include "Vector2D.h"
 #include "SDL_image.h"
 #include "AssetManager.h"
+#include "InputManager.h"
 
 class ColliderComponent;
 
@@ -28,6 +29,7 @@ public:
 	static SDL_Event event;
 	static SDL_Rect camera;
 	static AssetManager* assetManager;
+	static InputManager* inputManager;
 
 	enum groupLabels : std::size_t
 	{

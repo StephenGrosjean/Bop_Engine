@@ -12,6 +12,7 @@ Manager manager;
 SDL_Event Game::event;
 SDL_Renderer* Game::renderer = nullptr;
 AssetManager* Game::assetManager = new AssetManager(&manager);
+InputManager* Game::inputManager = new InputManager();
 
 SDL_Rect Game::camera = { 0,0,800,640};
 
@@ -67,7 +68,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	player.GetComponent<ColliderComponent>().collider = { 200,200 };
 	player.AddGroup(groupPlayers);
 
-	assetManager->CreateProjectile(Vec2i(400, 100), Vec2f::left, 200, 2, "projectile");
+	//assetManager->CreateProjectile(Vec2i(400, 100), Vec2f::left, 200, 2, "projectile");
 
 	SDL_Color white = { 255,255,255,255 };
 	label.AddComponent<UILabel>(Vec2i(10,10), "Test string", "arial", white);
@@ -76,16 +77,16 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 void Game::HandleEvents()
 {
 	
-	SDL_PollEvent(&event);
-
-	switch (event.type)
+	inputManager->Update();
+	
+	/*switch (event.type)
 	{
 		case SDL_QUIT:
 			isRunning = false;
 			break;
 		default:
 			break;
-	}
+	}*/
 }
 
 void Game::Update()
@@ -156,6 +157,7 @@ void Game::Render()
 	label.Draw();
 
 	SDL_RenderPresent(renderer);
+	inputManager->Reset();
 }
 
 void Game::Clean() 

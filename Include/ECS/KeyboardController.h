@@ -17,56 +17,50 @@ public:
 
 	void Update() override
 	{
-		if (Game::event.type == SDL_KEYDOWN)
+		if (Game::inputManager->GetKeyDown(SDLK_w))
 		{
-			switch (Game::event.key.keysym.sym)
-			{
-				case SDLK_w:
-					transform->velocity.y = -1;
-					sprite->Play("Walk");
-					break;
-				case SDLK_s:
-					transform->velocity.y = 1;
-					sprite->Play("Walk");
-					break;
-				case SDLK_d:
-					transform->velocity.x = 1;
-					sprite->Play("Walk");
-					break;
-				case SDLK_a:
-					transform->velocity.x = -1;
-					sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
-					sprite->Play("Walk");
-					break;
-				default:
-					break;
-			}
+			transform->velocity.y = -1;
+			sprite->Play("Walk");
+		}
+		else if (Game::inputManager->GetKeyUp(SDLK_w))
+		{
+			transform->velocity.y = 0;
+			sprite->Play("Idle");
 		}
 
-		if (Game::event.type == SDL_KEYUP)
+		if (Game::inputManager->GetKeyDown(SDLK_s))
 		{
-			switch (Game::event.key.keysym.sym)
-			{
-			case SDLK_w:
-				transform->velocity.y = 0;
-				sprite->Play("Idle");
-				break;
-			case SDLK_s:
-				transform->velocity.y = 0;
-				sprite->Play("Idle");
-				break;
-			case SDLK_d:
-				transform->velocity.x = 0;
-				sprite->Play("Idle");
-				break;
-			case SDLK_a:
-				transform->velocity.x = 0;
-				sprite->spriteFlip = SDL_FLIP_NONE;
-				sprite->Play("Idle");
-				break;
-			default:
-				break;
-			}
+			transform->velocity.y = 1;
+			sprite->Play("Walk");
+		}
+		else if (Game::inputManager->GetKeyUp(SDLK_s))
+		{
+			transform->velocity.y = 0;
+			sprite->Play("Idle");
+		}
+
+		if (Game::inputManager->GetKeyDown(SDLK_a))
+		{
+			transform->velocity.x = -1;
+			sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
+			sprite->Play("Walk");
+		}
+		else if (Game::inputManager->GetKeyUp(SDLK_a))
+		{
+			transform->velocity.x = 0;
+			sprite->spriteFlip = SDL_FLIP_NONE;
+			sprite->Play("Idle");
+		}
+
+		if (Game::inputManager->GetKeyDown(SDLK_d))
+		{
+			transform->velocity.x = 1;
+			sprite->Play("Walk");
+		}
+		else if (Game::inputManager->GetKeyUp(SDLK_d))
+		{
+			transform->velocity.x = 0;
+			sprite->Play("Idle");
 		}
 
 	}

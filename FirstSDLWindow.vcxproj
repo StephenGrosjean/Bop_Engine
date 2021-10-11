@@ -152,6 +152,7 @@
     <ClCompile Include="Src\Collision.cpp" />
     <ClCompile Include="Src\ECS\ECS.cpp" />
     <ClCompile Include="Src\Game.cpp" />
+    <ClCompile Include="Src\InputManager.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\TextureManager.cpp" />
     <ClCompile Include="Src\TileMap.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Include\ECS\SpriteComponent.h" />
     <ClInclude Include="Include\ECS\UILabelComponent.h" />
     <ClInclude Include="Include\Game.h" />
+    <ClInclude Include="Include\InputManager.h" />
     <ClInclude Include="Include\TextureManager.h" />
     <ClInclude Include="Include\TileMap.h" />
     <ClInclude Include="Include\Vector2D.h" />
