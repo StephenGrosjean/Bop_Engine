@@ -80,6 +80,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>D:\Dev\C++Game\FirstSDLWindow\Include;D:\Dev\SDL2_Image\include;D:\Dev\SDL2\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Dev\SDL2\lib\x64;D:\Dev\SDL2_Image\lib\x64;$(LibraryPath)</LibraryPath>
+    <SourcePath>D:\Dev\C++Game\SimpleGameEngine\Src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

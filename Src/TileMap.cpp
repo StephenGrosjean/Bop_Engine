@@ -1,9 +1,9 @@
-#include "TileMap.h"
-#include "Game.h"
+#include "..\TileMap.h"
+#include "..\Game.h"
 #include <fstream>
-#include "ECS\ECS.h"
-#include "ECS\Components.h"
-#include "Game.h"
+#include "..\ECS\ECS.h"
+#include "..\ECS\Components.h"
+#include "..\Game.h"
 
 extern Manager manager;
 

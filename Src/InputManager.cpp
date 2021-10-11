@@ -1,5 +1,5 @@
-#include "InputManager.h"
-#include "Game.h"
+#include "..\InputManager.h"
+#include "..\Game.h"
 
 InputManager::InputManager()
 {

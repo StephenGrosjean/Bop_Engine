@@ -1,8 +1,8 @@
 #pragma once
-#include "ECS\ECS.h"
-#include "AssetManager.h"
-#include "Game.h"
-#include "Vector2D.h"
+#include "..\ECS\ECS.h"
+#include "..\AssetManager.h"
+#include "..\Game.h"
+#include "..\Vector2D.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>

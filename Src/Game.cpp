@@ -1,9 +1,9 @@
-#include "Game.h"
-#include "TextureManager.h"
-#include "TileMap.h"
-#include "ECS/Components.h"
-#include "Vector2D.h"
-#include "Collision.h"
+#include "..\Game.h"
+#include "..\TextureManager.h"
+#include "..\TileMap.h"
+#include "..\ECS\Components.h"
+#include "..\Vector2D.h"
+#include "..\Collision.h"
 
 #include <sstream>
 

@@ -2,8 +2,8 @@
 #include "SDL.h"
 #include "TransformComponent.h"
 #include "Animation.h"
-#include "TextureManager.h"
-#include "Game.h"
+#include "..\TextureManager.h"
+#include "..\Game.h"
 #include <map>
 
 class SpriteComponent : public Component
