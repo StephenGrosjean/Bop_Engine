@@ -63,7 +63,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	player.AddComponent<TransformComponent>(3);
 	player.GetComponent<TransformComponent>().position = Vec2f(200, 200);
 	player.AddComponent<SpriteComponent>("player", true);
-	player.AddComponent<KeyboardController>();
+	player.AddComponent<KeyboardController>(0);
 	player.AddComponent<ColliderComponent>();
 	player.GetComponent<ColliderComponent>().collider = { 200,200 };
 	player.AddGroup(groupPlayers);

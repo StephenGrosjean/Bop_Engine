@@ -8,6 +8,12 @@ InputManager::InputManager()
 	keys.emplace(SDLK_s, State::None);
 	keys.emplace(SDLK_a, State::None);
 	keys.emplace(SDLK_d, State::None);
+
+	//Player 2 keys
+	keys.emplace(SDLK_UP, State::None);
+	keys.emplace(SDLK_DOWN, State::None);
+	keys.emplace(SDLK_LEFT, State::None);
+	keys.emplace(SDLK_RIGHT, State::None);
 }
 
 InputManager::~InputManager()
@@ -23,6 +29,38 @@ bool InputManager::GetKeyDown(SDL_Keycode key)
 bool InputManager::GetKeyUp(SDL_Keycode key)
 {
 	return keys[key] == State::Down;
+}
+
+SDL_Keycode& InputManager::GetInput(Direction direction, int playerID)
+{
+	if (playerID == 0)
+	{
+		switch (direction) {
+			case Direction::Up:
+				return player1_Up;
+			case Direction::Down:
+				return player1_Down;
+			case Direction::Left:
+				return player1_Left;
+			case Direction::Right:
+				return player1_Right;
+		}
+	}
+
+	if (playerID == 1)
+	{
+		switch (direction)
+		{
+		case Direction::Up:
+			return player2_Up;
+		case Direction::Down:
+			return player2_Down;
+		case Direction::Left:
+			return player2_Left;
+		case Direction::Right:
+			return player2_Right;
+		}
+	}
 }
 
 void InputManager::Update()
