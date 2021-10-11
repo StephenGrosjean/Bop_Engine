@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 	game->Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, xRes, yRes, false);
 	
 	//Main Game Loop
-	while (game->Running())
+	while (game->GetRunning())
 	{
 		frameStart = SDL_GetTicks();
 		

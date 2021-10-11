@@ -76,6 +76,9 @@ void InputManager::Update()
 		case SDL_KEYUP:
 			keys[event.key.keysym.sym] = State::Down;
 			break;
+		case SDL_QUIT:
+			isQuit = true;
+			break;
 		default:
 			break;
 		}

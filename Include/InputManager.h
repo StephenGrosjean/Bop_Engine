@@ -31,8 +31,8 @@ public:
 
 	void Update();
 	void Reset();
-
-protected:
+	bool isQuit = false;
+private:
 	std::map<SDL_Keycode, State> keys;
 
 	SDL_Keycode player1_Up = SDLK_w;

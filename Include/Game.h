@@ -23,7 +23,8 @@ public:
 	void Render();
 	void Clean();
 	
-	bool Running() { return isRunning; }
+	void SetRunning(bool value);
+	bool GetRunning();
 
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
@@ -42,8 +43,8 @@ public:
 
 
 private:
-	int counter = 0;
 	bool isRunning = false;
+	int counter = 0;
 	SDL_Window* window;
 };
 

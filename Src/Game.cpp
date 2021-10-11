@@ -16,7 +16,9 @@ InputManager* Game::inputManager = new InputManager();
 
 SDL_Rect Game::camera = { 0,0,800,640};
 
-auto& player(manager.AddEntity());
+auto& player1(manager.AddEntity());
+auto& player2(manager.AddEntity());
+
 auto& label(manager.AddEntity());
 
 auto& tiles(manager.GetGroup(Game::groupMap));
@@ -60,13 +62,21 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
 	map->Load("Assets/map.map", Vec2i(10, 10));
 
-	player.AddComponent<TransformComponent>(3);
-	player.GetComponent<TransformComponent>().position = Vec2f(200, 200);
-	player.AddComponent<SpriteComponent>("player", true);
-	player.AddComponent<KeyboardController>(0);
-	player.AddComponent<ColliderComponent>();
-	player.GetComponent<ColliderComponent>().collider = { 200,200 };
-	player.AddGroup(groupPlayers);
+	player1.AddComponent<TransformComponent>(3);
+	player1.GetComponent<TransformComponent>().position = Vec2f(200, 200);
+	player1.AddComponent<SpriteComponent>("player", true);
+	player1.AddComponent<KeyboardController>(0);
+	player1.AddComponent<ColliderComponent>();
+	player1.GetComponent<ColliderComponent>().collider = { 200,200 };
+	player1.AddGroup(groupPlayers);
+
+	player2.AddComponent<TransformComponent>(3);
+	player2.GetComponent<TransformComponent>().position = Vec2f(400, 400);
+	player2.AddComponent<SpriteComponent>("player", true);
+	player2.AddComponent<KeyboardController>(1);
+	player2.AddComponent<ColliderComponent>();
+	player2.GetComponent<ColliderComponent>().collider = { 400,400 };
+	player2.AddGroup(groupPlayers);
 
 	//assetManager->CreateProjectile(Vec2i(400, 100), Vec2f::left, 200, 2, "projectile");
 
@@ -78,21 +88,17 @@ void Game::HandleEvents()
 {
 	
 	inputManager->Update();
-	
-	/*switch (event.type)
+
+	if (inputManager->isQuit)
 	{
-		case SDL_QUIT:
-			isRunning = false;
-			break;
-		default:
-			break;
-	}*/
+		Game::SetRunning(false);
+	}
 }
 
 void Game::Update()
 {
-	SDL_Rect playerCol = player.GetComponent<ColliderComponent>().collider;
-	Vec2f playerPos = player.GetComponent<TransformComponent>().position;
+	SDL_Rect playerCol = player1.GetComponent<ColliderComponent>().collider;
+	Vec2f playerPos = player1.GetComponent<TransformComponent>().position;
 
 	std::stringstream ss;
 	ss << "Player position : " << playerPos;
@@ -106,21 +112,20 @@ void Game::Update()
 		SDL_Rect cCol = c->GetComponent<ColliderComponent>().collider;
 		if (Collision::AABB(cCol, playerCol))
 		{
-			std::cout << player.GetComponent<TransformComponent>().position << std::endl;
-			player.GetComponent<TransformComponent>().position = playerPos;
+			player1.GetComponent<TransformComponent>().position = playerPos;
 		}
 	}
 
 	for (auto& p : projectiles)
 	{
-		if (Collision::AABB(player.GetComponent<ColliderComponent>().collider, p->GetComponent<ColliderComponent>().collider))
+		if (Collision::AABB(player1.GetComponent<ColliderComponent>().collider, p->GetComponent<ColliderComponent>().collider))
 		{
 			p->Destroy();
 		}
 	}
 
-	camera.x = player.GetComponent<TransformComponent>().position.x - 400;
-	camera.y = player.GetComponent<TransformComponent>().position.y - 320;
+	camera.x = player1.GetComponent<TransformComponent>().position.x - 400;
+	camera.y = player1.GetComponent<TransformComponent>().position.y - 320;
 
 	if (camera.x < 0)
 		camera.x = 0;
@@ -165,5 +170,15 @@ void Game::Clean()
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
+}
+
+void Game::SetRunning(bool value)
+{
+	isRunning = value;
+}
+
+bool Game::GetRunning()
+{
+	return isRunning;
 }
 
