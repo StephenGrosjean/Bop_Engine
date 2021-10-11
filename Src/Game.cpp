@@ -97,11 +97,14 @@ void Game::HandleEvents()
 
 void Game::Update()
 {
-	SDL_Rect playerCol = player1.GetComponent<ColliderComponent>().collider;
-	Vec2f playerPos = player1.GetComponent<TransformComponent>().position;
+	SDL_Rect player1Col = player1.GetComponent<ColliderComponent>().collider;
+	SDL_Rect player2Col = player2.GetComponent<ColliderComponent>().collider;
+
+	Vec2f player1Pos = player1.GetComponent<TransformComponent>().position;
+	Vec2f player2Pos = player2.GetComponent<TransformComponent>().position;
 
 	std::stringstream ss;
-	ss << "Player position : " << playerPos;
+	ss << "Player position : " << player1Pos;
 	label.GetComponent<UILabel>().SetLabelText(ss.str(), "arial");
 
 	manager.Refresh();
@@ -110,9 +113,13 @@ void Game::Update()
 	for (auto& c : colliders)
 	{
 		SDL_Rect cCol = c->GetComponent<ColliderComponent>().collider;
-		if (Collision::AABB(cCol, playerCol))
+		if (Collision::AABB(cCol, player1Col))
 		{
-			player1.GetComponent<TransformComponent>().position = playerPos;
+			player1.GetComponent<TransformComponent>().position = player1Pos;
+		}
+		if (Collision::AABB(cCol, player2Col))
+		{
+			player2.GetComponent<TransformComponent>().position = player2Pos;
 		}
 	}
 
