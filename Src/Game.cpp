@@ -18,9 +18,10 @@ SDL_Rect Game::camera = { 0, 0, 800, 640};
 
 auto& player1(manager.AddEntity());
 auto& player2(manager.AddEntity());
-auto& validTile(manager.AddEntity());
-
-
+auto& validTile1(manager.AddEntity());
+auto& validTile2(manager.AddEntity());
+auto& validTile3(manager.AddEntity());
+auto& validTile4(manager.AddEntity());
 
 auto& label(manager.AddEntity());
 
@@ -67,14 +68,9 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	map = new TileMap("terrain", 2, 32);
 
 	map->Load("Assets/map.map", Vec2i(10, 10));
-	map->SetTileTexture(Vec2i(64, 64), "validTile");
+	//map->SetTileTexture(Vec2i(64, 64), "validTile");
 
-	validTile.AddComponent<TransformComponent>(500,500, 32, 32, 2);
-	validTile.AddComponent<SpriteComponent>("collider", false);
-	validTile.AddComponent<ColliderComponent>();
-	validTile.GetComponent<ColliderComponent>().collider = { 500,500 };
-	validTile.AddComponent<ValidTileComponent>();
-	validTile.AddGroup(groupValidTiles);
+	CreateValidTiles();
 
 	player1.AddComponent<TransformComponent>(3);
 	player1.GetComponent<TransformComponent>().position = Vec2f(200, 200);
@@ -91,8 +87,6 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	player2.AddComponent<ColliderComponent>();
 	player2.GetComponent<ColliderComponent>().collider = { 400,400 };
 	player2.AddGroup(groupPlayers);
-
-	assetManager->CreateProjectile(Vec2i(600, 0), Vec2f::left, 200, 2, "projectile");
 
 	SDL_Color white = { 255,255,255,255 };
 	label.AddComponent<UILabel>(Vec2i(10,10), "Test string", "arial", white);
@@ -112,6 +106,7 @@ void Game::HandleEvents()
 
 void Game::Update()
 {
+	timer += deltaTime;
 	ColliderComponent& player1Col = player1.GetComponent<ColliderComponent>();
 	ColliderComponent& player2Col = player2.GetComponent<ColliderComponent>();
 	Vec2f player1Vel = player1.GetComponent<TransformComponent>().velocity;
@@ -132,36 +127,68 @@ void Game::Update()
 		ColliderComponent& cCol = c->GetComponent<ColliderComponent>();
 		if (Collision::AABB(cCol, player1Col))
 		{
-			player1.GetComponent<TransformComponent>().position = player1Pos;
-			//player1.GetComponent<TransformComponent>().velocity = player1Vel * -1;
+			player1.GetComponent<TransformComponent>().position = player1Pos +(player1Vel * -0.1f);
+			//player1.GetComponent<TransformComponent>().velocity = ;
 		}
 
 		if (Collision::AABB(cCol, player2Col))
 		{
-			player2.GetComponent<TransformComponent>().position = player2Pos;
+			player2.GetComponent<TransformComponent>().position = player2Pos + (player2Vel * -0.1f);
 			//player2.GetComponent<TransformComponent>().velocity = player2Vel * -1;
 		}
 	}
 
 	for (auto& p : projectiles)
 	{
-		if (Collision::AABB(player1.GetComponent<ColliderComponent>().collider, p->GetComponent<ColliderComponent>().collider))
+		if (!isPlayer1Valid)
 		{
-			p->Destroy();
+			if (Collision::AABB(player1.GetComponent<ColliderComponent>().collider, p->GetComponent<ColliderComponent>().collider))
+			{
+				std::cout << "P1 DEAD" << std::endl;
+				//player1.Destroy();
+			}
+		}
+
+		if (!isPlayer2Valid)
+		{
+			if (Collision::AABB(player2.GetComponent<ColliderComponent>().collider, p->GetComponent<ColliderComponent>().collider))
+			{
+				std::cout << "P2 DEAD" << std::endl;
+				//player2.Destroy();
+			}
 		}
 	}
 
+	bool tmpP1Valid = false;
+	bool tmpP2Valid = false;
 	for (auto& v : validTiles)
 	{
 		ColliderComponent& cCol = v->GetComponent<ColliderComponent>();
+
 		if (Collision::AABB(cCol, player1Col))
 		{
-			std::cout << "Player 1 is in validPos" << std::endl;
+			tmpP1Valid = true;
 		}
 		if (Collision::AABB(cCol, player2Col))
 		{
-			std::cout << "Player 2 is in validPos" << std::endl;
+			tmpP2Valid = true;
 		}
+	}
+
+	isPlayer1Valid = tmpP1Valid;
+	isPlayer2Valid = tmpP2Valid;
+
+	if (timer > 200 && !hasPlacedTiles)
+	{
+		hasPlacedTiles = true;
+		SetRandomTiles();
+	}
+
+	if (timer > 500)
+	{
+		SpawnLaser();
+		hasPlacedTiles = false;
+		timer = 0;
 	}
 
 	/*camera.x = player1.GetComponent<TransformComponent>().position.x - 400;
@@ -189,6 +216,11 @@ void Game::Render()
 		t->Draw();
 	}
 
+	for (auto& v : validTiles)
+	{
+		v->Draw();
+	}
+
 	for (auto& p : players)
 	{
 		p->Draw();
@@ -197,11 +229,6 @@ void Game::Render()
 	for (auto& p : projectiles)
 	{
 		p->Draw();
-	}
-
-	for (auto& v : validTiles)
-	{
-		v->Draw();
 	}
 
 	label.Draw();
@@ -225,5 +252,66 @@ void Game::SetRunning(bool value)
 bool Game::GetRunning()
 {
 	return isRunning;
+}
+
+void Game::SetDeltaTime(float time)
+{
+	deltaTime = time;
+}
+
+void Game::SpawnLaser()
+{
+	assetManager->CreateProjectile(Vec2i(600, 0), Vec2f::left, 500, 2, "projectile");
+}
+
+void Game::SetRandomTiles()
+{
+	Vec2f rdmPos1 = Vec2f((std::rand() % 8) + 1, (std::rand() % 8) + 1) * 64;
+	Vec2f rdmPos2 = Vec2f((std::rand() % 8) + 1, (std::rand() % 8) + 1) * 64;
+	Vec2f rdmPos3 = Vec2f((std::rand() % 8) + 1, (std::rand() % 8) + 1) * 64;
+	Vec2f rdmPos4 = Vec2f((std::rand() % 8) + 1, (std::rand() % 8) + 1) * 64;
+
+	std::cout << rdmPos1 << std::endl;
+	std::cout << rdmPos2 << std::endl;
+	std::cout << rdmPos3 << std::endl;
+	std::cout << rdmPos4 << std::endl;
+
+	validTile1.GetComponent<TransformComponent>().position = rdmPos1;
+	validTile2.GetComponent<TransformComponent>().position = rdmPos2;
+	validTile3.GetComponent<TransformComponent>().position = rdmPos3;
+	validTile4.GetComponent<TransformComponent>().position = rdmPos4;
+}
+
+void Game::CreateValidTiles()
+{
+	validTile1.AddComponent<TransformComponent>(1000, 1000, 32, 32, 2);
+	validTile2.AddComponent<TransformComponent>(1000, 1000, 32, 32, 2);
+	validTile3.AddComponent<TransformComponent>(1000, 1000, 32, 32, 2);
+	validTile4.AddComponent<TransformComponent>(1000, 1000, 32, 32, 2);
+
+	validTile1.AddComponent<SpriteComponent>("validTile", false);
+	validTile2.AddComponent<SpriteComponent>("validTile", false);
+	validTile3.AddComponent<SpriteComponent>("validTile", false);
+	validTile4.AddComponent<SpriteComponent>("validTile", false);
+
+	validTile1.AddComponent<ColliderComponent>();
+	validTile2.AddComponent<ColliderComponent>();
+	validTile3.AddComponent<ColliderComponent>();
+	validTile4.AddComponent<ColliderComponent>();
+
+	validTile1.GetComponent<ColliderComponent>().collider = { 1000, 1000 };
+	validTile2.GetComponent<ColliderComponent>().collider = { 1000, 1000 };
+	validTile3.GetComponent<ColliderComponent>().collider = { 1000, 1000 };
+	validTile4.GetComponent<ColliderComponent>().collider = { 1000, 1000 };
+
+	validTile1.AddComponent<ValidTileComponent>();
+	validTile2.AddComponent<ValidTileComponent>();
+	validTile3.AddComponent<ValidTileComponent>();
+	validTile4.AddComponent<ValidTileComponent>();
+
+	validTile1.AddGroup(groupValidTiles);
+	validTile2.AddGroup(groupValidTiles);
+	validTile3.AddGroup(groupValidTiles);
+	validTile4.AddGroup(groupValidTiles);
 }
 

@@ -25,6 +25,11 @@ public:
 	
 	void SetRunning(bool value);
 	bool GetRunning();
+	void SetDeltaTime(float time);
+
+	void SpawnLaser();
+	void SetRandomTiles();
+	void CreateValidTiles();
 
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
@@ -44,11 +49,15 @@ public:
 
 
 private:
+	bool hasPlacedTiles = false;
+	float deltaTime = 0.0f;
 	bool isRunning = false;
 	int counter = 0;
 	SDL_Window* window;
 	bool isPlayer1Valid;
 	bool isPlayer2Valid;
+	float timer;
+	bool hasSpawnedLaser = false;
 };
 
 
