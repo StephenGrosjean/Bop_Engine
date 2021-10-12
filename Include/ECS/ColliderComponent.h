@@ -27,6 +27,7 @@ public:
 	SDL_Rect destRect;				// Destination rect of the texture
 	int radius;
 	Type type;
+	Vec2f scale = Vec2f::one;
 
 	//Default constructor
 	ColliderComponent()
@@ -55,6 +56,20 @@ public:
 		collider.x = position.x;
 		collider.y = position.y;
 		collider.h = collider.w = size;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="tag">: Tag of the collider</param>
+	/// <param name="position">: Position of the collider</param>
+	/// <param name="size">: Size of the collider</param>
+	ColliderComponent(const std::string& tag, const Vec2i& position, const Vec2f& scale)
+	{
+		this->tag = tag;
+		collider.x = position.x;
+		collider.y = position.y;
+		this->scale = scale;
 	}
 
 	void SetPosition(Vec2i pos)
@@ -87,8 +102,8 @@ public:
 		{
 			collider.x = static_cast<int>(transform->position.x);
 			collider.y = static_cast<int>(transform->position.y);
-			collider.w = transform->width * transform->scale.x;
-			collider.h = transform->height * transform->scale.y;
+			collider.w = transform->width * transform->scale.x * scale.x;
+			collider.h = transform->height * transform->scale.y * scale.y;
 		}
 		
 		destRect.x = collider.x - Game::camera.x;

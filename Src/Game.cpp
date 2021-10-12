@@ -59,7 +59,8 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	}
 
 	assetManager->AddTexture("terrain", "Assets/terrain_ss.png");
-	assetManager->AddTexture("player", "Assets/player_anims.png");
+	assetManager->AddTexture("player1", "Assets/player1_anims.png");
+	assetManager->AddTexture("player2", "Assets/player2_anims.png");
 	assetManager->AddTexture("projectile", "Assets/projectile.png");
 	assetManager->AddTexture("validTile", "Assets/validTile.png");
 	assetManager->AddTexture("collider", "Assets/ColliderTexture.png");
@@ -72,17 +73,16 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
 	CreateValidTiles();
 
-	player1.AddComponent<TransformComponent>(3);
+	player1.AddComponent<TransformComponent>(1);
 	player1.GetComponent<TransformComponent>().position = Vec2f(200, 200);
-	player1.AddComponent<SpriteComponent>("player", true);
+	player1.AddComponent<SpriteComponent>("player1", true);
 	player1.AddComponent<KeyboardController>(0);
-	player1.AddComponent<ColliderComponent>();
-	player1.GetComponent<ColliderComponent>().collider = { 200,200 };
+	player1.AddComponent<ColliderComponent>("Player1", Vec2i(200,200), Vec2f(1,0.5f));
 	player1.AddGroup(groupPlayers);
 
-	player2.AddComponent<TransformComponent>(3);
+	player2.AddComponent<TransformComponent>(1);
 	player2.GetComponent<TransformComponent>().position = Vec2f(400, 400);
-	player2.AddComponent<SpriteComponent>("player", true);
+	player2.AddComponent<SpriteComponent>("player2", true);
 	player2.AddComponent<KeyboardController>(1);
 	player2.AddComponent<ColliderComponent>();
 	player2.GetComponent<ColliderComponent>().collider = { 400,400 };
