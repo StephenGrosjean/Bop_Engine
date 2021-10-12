@@ -4,6 +4,7 @@
 #include "..\ECS\Components.h"
 #include "..\Vector2D.h"
 #include "..\Collision.h"
+#include "..\AudioManager.h"
 
 #include <sstream>
 
@@ -13,6 +14,7 @@ SDL_Event Game::event;
 SDL_Renderer* Game::renderer = nullptr;
 AssetManager* Game::assetManager = new AssetManager(&manager);
 InputManager* Game::inputManager = new InputManager();
+AudioManager* Game::audioManager = new AudioManager();
 
 SDL_Rect Game::camera = { 0, 0, 800, 640};
 
@@ -65,6 +67,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	assetManager->AddTexture("validTile", "Assets/validTile.png");
 	assetManager->AddTexture("collider", "Assets/ColliderTexture.png");
 	assetManager->AddFont("arial", "Assets/Fonts/arial.ttf", 16);
+	assetManager->AddSFX("test", "Assets/test.wav");
 
 	map = new TileMap("terrain", 2, 32);
 
@@ -91,6 +94,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	SDL_Color white = { 255,255,255,255 };
 	label.AddComponent<UILabel>(Vec2i(10,10), "Test string", "arial", white);
 	
+	audioManager->PlaySFX("test");
 }
 
 void Game::HandleEvents()

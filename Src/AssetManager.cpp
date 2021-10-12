@@ -38,3 +38,23 @@ TTF_Font* AssetManager::GetFont(std::string id)
 {
 	return fonts[id];
 }
+
+void AssetManager::AddMusic(std::string id, std::string path)
+{
+	music.emplace(id, Mix_LoadMUS(path.c_str()));	
+}
+
+void AssetManager::AddSFX(std::string id, std::string path)
+{
+	sfx.emplace(id, Mix_LoadWAV(path.c_str()));
+}
+
+Mix_Music* AssetManager::GetMusic(std::string id)
+{
+	return music[id];
+}
+
+Mix_Chunk* AssetManager::GetSFX(std::string id)
+{
+	return sfx[id];
+}

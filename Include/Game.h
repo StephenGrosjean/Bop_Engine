@@ -9,6 +9,7 @@
 #include "InputManager.h"
 
 class ColliderComponent;
+class AudioManager;
 
 class Game {
 
@@ -36,6 +37,7 @@ public:
 	static SDL_Rect camera;
 	static AssetManager* assetManager;
 	static InputManager* inputManager;
+	static AudioManager* audioManager;
 
 	enum groupLabels : std::size_t
 	{
