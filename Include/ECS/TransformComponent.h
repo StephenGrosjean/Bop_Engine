@@ -1,5 +1,6 @@
 #pragma once
 #include "..\Vector2D.h"
+#include "..\Game.h"
 
 class TransformComponent : public Component
 {
@@ -11,8 +12,6 @@ public:
 	int height = 32;
 	int width = 32;
 	Vec2i scale = Vec2i::one;
-
-	int speed = 3;
 
 	TransformComponent()
 	{
@@ -58,7 +57,7 @@ public:
 
 	void Update() override
 	{
-		position.x += static_cast<int>(velocity.x * speed);
-		position.y += static_cast<int>(velocity.y * speed);
+		position.x += velocity.x;
+		position.y += velocity.y;
 	}
 };

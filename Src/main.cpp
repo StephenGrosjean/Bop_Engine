@@ -1,9 +1,10 @@
 #include "..\Game.h"
+#include "..\Time.h"
 
 Game* game = nullptr;
-const int xRes = 800;
-const int yRes = 640;
-const int FPS = 60;
+#define XRES 640 //X resolution
+#define YRES 640 //Y resolution
+#define FPS  60	 //Max FPS
 
 int main(int argc, char* argv[]) 
 {
@@ -13,19 +14,19 @@ int main(int argc, char* argv[])
 	int frameTime;
 
 	game = new Game();
-	game->Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, xRes, yRes, false);
+	game->Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, XRES, YRES, false);
 	
 	//Main Game Loop
 	while (game->GetRunning())
 	{
 		frameStart = SDL_GetTicks();
-		
+
 		game->HandleEvents();
 		game->Update();
 		game->Render();
 		
 		frameTime = SDL_GetTicks() - frameStart;
-		game->SetDeltaTime(frameTime);
+		game->time->SetDeltaTime(frameTime);
 
 		if (frameDelay > frameTime)
 		{

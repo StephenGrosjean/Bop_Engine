@@ -69,6 +69,8 @@ public:
 			sprite->Play("Idle");
 		}
 
+		transform->velocity *= Game::difficultyManager->currentPlayerSpeed;
+
 	}
 
 private:

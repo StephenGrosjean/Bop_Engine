@@ -6,7 +6,7 @@
 class ProjectileComponent : public Component
 {
 public:
-	ProjectileComponent(int range, int speed, Vec2f velocity) : range(range), speed(speed), velocity(velocity)
+	ProjectileComponent(Vec2f velocity) : velocity(velocity)
 	{
 
 	}
@@ -21,25 +21,22 @@ public:
 
 	void Update() override
 	{
-		distance += speed;
+		timer += Game::time->DeltaTime();
+		if (timer >= timeBeforeDestruction) entity->Destroy();
 
-		if (distance > range)
-		{
-			entity->Destroy();
-		}
-		else if(transform->position.x > Game::camera.x + Game::camera.w || 
+		/*if (transform->position.x > Game::camera.x + Game::camera.w ||
 				transform->position.x < Game::camera.x ||
 				transform->position.y > Game::camera.y + Game::camera.h ||
 				transform->position.y < Game::camera.y)
 		{
 			entity->Destroy();
-		}
+		}*/
 	}
 private:
 	TransformComponent* transform;
-	int range = 0;
-	int speed = 0;
+	int timeBeforeDestruction = 200;
 	int distance = 0;
+	float timer = 0.0f;
 	Vec2f velocity;
 
 };

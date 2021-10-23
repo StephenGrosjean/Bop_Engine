@@ -7,6 +7,8 @@
 #include "SDL_image.h"
 #include "AssetManager.h"
 #include "InputManager.h"
+#include "DifficultyManager.h"
+#include "Time.h"
 
 class ColliderComponent;
 class AudioManager;
@@ -26,7 +28,6 @@ public:
 	
 	void SetRunning(bool value);
 	bool GetRunning();
-	void SetDeltaTime(float time);
 
 	void SpawnLaser();
 	void SetRandomTiles();
@@ -38,6 +39,8 @@ public:
 	static AssetManager* assetManager;
 	static InputManager* inputManager;
 	static AudioManager* audioManager;
+	static DifficultyManager* difficultyManager;
+	static Time* time;
 
 	enum groupLabels : std::size_t
 	{
@@ -52,14 +55,24 @@ public:
 
 private:
 	bool hasPlacedTiles = false;
-	float deltaTime = 0.0f;
 	bool isRunning = false;
 	int counter = 0;
 	SDL_Window* window;
 	bool isPlayer1Valid;
 	bool isPlayer2Valid;
+	bool isPlayer1Dead;
+	bool isPlayer2Dead;
 	float timer;
 	bool hasSpawnedLaser = false;
+	bool startPressed = false;
+	bool gameOver = false;
+	int levelCounter = 1;
+
+
+	//sound check
+	bool isDeathSoundPlayed = false;
+	bool hasPlayedWarningSound = false;
+	bool hasPlayedStartSound = false;
 };
 
 

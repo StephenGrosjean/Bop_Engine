@@ -85,6 +85,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>D:\Dev\SDL2_ttf\include;D:\Dev\SDL2_mixer\include;D:\Dev\SDL2_Image\include;D:\Dev\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Dev\SDL2_ttf\lib\x64;D:\Dev\SDL2_mixer\lib\x64;D:\Dev\SDL2_Image\lib\x64;D:\Dev\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
+    <SourcePath>D:\Dev\C++Game\SimpleGameEngine\Src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -141,12 +144,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Dev\SDL2_mixer\include;D:\Dev\SDL2_ttf\include;D:\Dev\SDL2_Image\include;D:\Dev\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -163,6 +169,7 @@
     <ClInclude Include="Include\AssetManager.h" />
     <ClInclude Include="Include\AudioManager.h" />
     <ClInclude Include="Include\Collision.h" />
+    <ClInclude Include="Include\DifficultyManager.h" />
     <ClInclude Include="Include\ECS\Animation.h" />
     <ClInclude Include="Include\ECS\ColliderComponent.h" />
     <ClInclude Include="Include\ECS\Components.h" />
@@ -178,6 +185,7 @@
     <ClInclude Include="Include\InputManager.h" />
     <ClInclude Include="Include\TextureManager.h" />
     <ClInclude Include="Include\TileMap.h" />
+    <ClInclude Include="Include\Time.h" />
     <ClInclude Include="Include\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>

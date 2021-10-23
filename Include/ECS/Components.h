@@ -8,3 +8,5 @@
 #include "ProjectileComponent.h"
 #include "UILabelComponent.h"
 #include "ValidTileComponent.h"
+
+//Used to include all components

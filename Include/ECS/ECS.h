@@ -6,6 +6,10 @@
 #include <bitset>
 #include <array>
 
+/// <summary>
+/// Entity component system
+/// </summary>
+
 class Component;
 class Entity;
 class Manager;
@@ -111,6 +115,10 @@ public:
 	}
 };
 
+
+/// <summary>
+/// Entity manager for ECS
+/// </summary>
 class Manager
 {
 private:

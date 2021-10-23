@@ -35,6 +35,12 @@ public:
 		SDL_DestroyTexture(this->labelTexture);
 	}
 
+	void SetPosition(Vec2i position)
+	{
+		this->position.x = position.x;
+		this->position.y = position.y;
+	}
+
 private:
 	SDL_Rect position;
 	std::string labelText;

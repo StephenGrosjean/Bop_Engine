@@ -14,6 +14,9 @@ InputManager::InputManager()
 	keys.emplace(SDLK_DOWN, State::None);
 	keys.emplace(SDLK_LEFT, State::None);
 	keys.emplace(SDLK_RIGHT, State::None);
+
+	//Start Key
+	keys.emplace(SDLK_SPACE, State::None);
 }
 
 InputManager::~InputManager()

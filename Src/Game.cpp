@@ -15,8 +15,10 @@ SDL_Renderer* Game::renderer = nullptr;
 AssetManager* Game::assetManager = new AssetManager(&manager);
 InputManager* Game::inputManager = new InputManager();
 AudioManager* Game::audioManager = new AudioManager();
+DifficultyManager* Game::difficultyManager = new DifficultyManager();
+Time* Game::time = new Time();
 
-SDL_Rect Game::camera = { 0, 0, 800, 640};
+SDL_Rect Game::camera = { 0, 0, 640, 640};
 
 auto& player1(manager.AddEntity());
 auto& player2(manager.AddEntity());
@@ -26,6 +28,7 @@ auto& validTile3(manager.AddEntity());
 auto& validTile4(manager.AddEntity());
 
 auto& label(manager.AddEntity());
+auto& levelCounterLabel(manager.AddEntity());
 
 auto& tiles(manager.GetGroup(Game::groupMap));
 auto& players(manager.GetGroup(Game::groupPlayers));
@@ -67,7 +70,10 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	assetManager->AddTexture("validTile", "Assets/validTile.png");
 	assetManager->AddTexture("collider", "Assets/ColliderTexture.png");
 	assetManager->AddFont("arial", "Assets/Fonts/arial.ttf", 16);
-	assetManager->AddSFX("test", "Assets/test.wav");
+	assetManager->AddSFX("alert", "Assets/Audio/alert.wav");
+	assetManager->AddSFX("warning", "Assets/Audio/warning.wav");
+	assetManager->AddSFX("death", "Assets/Audio/death.wav");
+	assetManager->AddSFX("start", "Assets/Audio/Start.wav");
 
 	map = new TileMap("terrain", 2, 32);
 
@@ -92,9 +98,8 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	player2.AddGroup(groupPlayers);
 
 	SDL_Color white = { 255,255,255,255 };
-	label.AddComponent<UILabel>(Vec2i(10,10), "Test string", "arial", white);
-	
-	audioManager->PlaySFX("test");
+	label.AddComponent<UILabel>(Vec2i(320,320), "Test string", "arial", white);
+	levelCounterLabel.AddComponent<UILabel>(Vec2i(10, 10), "Level : 1", "arial", white);
 }
 
 void Game::HandleEvents()
@@ -110,7 +115,55 @@ void Game::HandleEvents()
 
 void Game::Update()
 {
-	timer += deltaTime;
+	if (Game::inputManager->GetKeyDown(SDLK_SPACE))
+	{
+		startPressed = true;
+	}
+
+	if (gameOver)
+	{
+		if (!isDeathSoundPlayed)
+		{
+			isDeathSoundPlayed = true;
+			audioManager->PlaySFX("death");
+
+		}
+
+		if (isPlayer1Dead && !isPlayer2Dead)
+		{
+			label.GetComponent<UILabel>().SetPosition(Vec2i(250, 320));
+			label.GetComponent<UILabel>().SetLabelText("Player 2 Won", "arial");
+		}
+		else if (!isPlayer1Dead && isPlayer2Dead)
+		{
+			label.GetComponent<UILabel>().SetPosition(Vec2i(250, 320));
+			label.GetComponent<UILabel>().SetLabelText("Player 1 Won", "arial");
+		}
+		else if (isPlayer1Dead && isPlayer2Dead)
+		{
+			label.GetComponent<UILabel>().SetPosition(Vec2i(250, 320));
+			label.GetComponent<UILabel>().SetLabelText("Both player died...", "arial");
+		}
+		return;
+	}
+
+	//Game Start
+	if (!startPressed)
+	{
+		label.GetComponent<UILabel>().SetPosition(Vec2i(250, 320));
+		label.GetComponent<UILabel>().SetLabelText("Press SPACE to start", "arial");
+		return;
+	}
+	if (!hasPlayedStartSound)
+	{
+		hasPlayedStartSound = true;
+		audioManager->PlaySFX("start");
+	}
+
+	label.GetComponent<UILabel>().SetLabelText(" ", "arial");
+	levelCounterLabel.GetComponent<UILabel>().SetLabelText("Level : " + std::to_string(levelCounter), "arial");
+
+	timer += time->DeltaTime();
 	ColliderComponent& player1Col = player1.GetComponent<ColliderComponent>();
 	ColliderComponent& player2Col = player2.GetComponent<ColliderComponent>();
 	Vec2f player1Vel = player1.GetComponent<TransformComponent>().velocity;
@@ -118,10 +171,6 @@ void Game::Update()
 
 	Vec2f player1Pos = player1.GetComponent<TransformComponent>().position;
 	Vec2f player2Pos = player2.GetComponent<TransformComponent>().position;
-
-	std::stringstream ss;
-	ss << "Player position : " << player1Pos;
-	label.GetComponent<UILabel>().SetLabelText(ss.str(), "arial");
 
 	manager.Refresh();
 	manager.Update();
@@ -132,13 +181,11 @@ void Game::Update()
 		if (Collision::AABB(cCol, player1Col))
 		{
 			player1.GetComponent<TransformComponent>().position = player1Pos +(player1Vel * -0.1f);
-			//player1.GetComponent<TransformComponent>().velocity = ;
 		}
 
 		if (Collision::AABB(cCol, player2Col))
 		{
 			player2.GetComponent<TransformComponent>().position = player2Pos + (player2Vel * -0.1f);
-			//player2.GetComponent<TransformComponent>().velocity = player2Vel * -1;
 		}
 	}
 
@@ -149,6 +196,8 @@ void Game::Update()
 			if (Collision::AABB(player1.GetComponent<ColliderComponent>().collider, p->GetComponent<ColliderComponent>().collider))
 			{
 				std::cout << "P1 DEAD" << std::endl;
+				gameOver = true;
+				isPlayer1Dead = true;
 				//player1.Destroy();
 			}
 		}
@@ -158,6 +207,8 @@ void Game::Update()
 			if (Collision::AABB(player2.GetComponent<ColliderComponent>().collider, p->GetComponent<ColliderComponent>().collider))
 			{
 				std::cout << "P2 DEAD" << std::endl;
+				gameOver = true;
+				isPlayer2Dead = true;
 				//player2.Destroy();
 			}
 		}
@@ -182,15 +233,22 @@ void Game::Update()
 	isPlayer1Valid = tmpP1Valid;
 	isPlayer2Valid = tmpP2Valid;
 
-	if (timer > 200 && !hasPlacedTiles)
+	if (timer > difficultyManager->currentSpawnDelay && !hasPlacedTiles)
 	{
 		hasPlacedTiles = true;
 		SetRandomTiles();
 	}
 
-	if (timer > 500)
+	if (timer > difficultyManager->currentLaserDelay - 20 && !hasPlayedWarningSound)
+	{
+		hasPlayedWarningSound = true;
+		audioManager->PlaySFX("warning");
+	}
+
+	if (timer > difficultyManager->currentLaserDelay)
 	{
 		SpawnLaser();
+		hasPlayedWarningSound = false;
 		hasPlacedTiles = false;
 		timer = 0;
 	}
@@ -236,7 +294,7 @@ void Game::Render()
 	}
 
 	label.Draw();
-
+	levelCounterLabel.Draw();
 	SDL_RenderPresent(renderer);
 	inputManager->Reset();
 }
@@ -258,27 +316,21 @@ bool Game::GetRunning()
 	return isRunning;
 }
 
-void Game::SetDeltaTime(float time)
-{
-	deltaTime = time;
-}
-
 void Game::SpawnLaser()
 {
-	assetManager->CreateProjectile(Vec2i(600, 0), Vec2f::left, 500, 2, "projectile");
+	levelCounter++;
+	assetManager->CreateProjectile(Vec2i(800, 0), Vec2f::left * difficultyManager->currentLaserSpeed, "projectile");
+	difficultyManager->ReduceDelay();
 }
 
 void Game::SetRandomTiles()
 {
+	audioManager->PlaySFX("alert");
+
 	Vec2f rdmPos1 = Vec2f((std::rand() % 8) + 1, (std::rand() % 8) + 1) * 64;
 	Vec2f rdmPos2 = Vec2f((std::rand() % 8) + 1, (std::rand() % 8) + 1) * 64;
 	Vec2f rdmPos3 = Vec2f((std::rand() % 8) + 1, (std::rand() % 8) + 1) * 64;
 	Vec2f rdmPos4 = Vec2f((std::rand() % 8) + 1, (std::rand() % 8) + 1) * 64;
-
-	std::cout << rdmPos1 << std::endl;
-	std::cout << rdmPos2 << std::endl;
-	std::cout << rdmPos3 << std::endl;
-	std::cout << rdmPos4 << std::endl;
 
 	validTile1.GetComponent<TransformComponent>().position = rdmPos1;
 	validTile2.GetComponent<TransformComponent>().position = rdmPos2;
